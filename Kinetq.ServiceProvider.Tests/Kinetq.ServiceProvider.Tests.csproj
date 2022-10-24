@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kinetq.EntityFrameworkService\Kinetq.ServiceProvider.csproj" />
+    <ProjectReference Include="..\Kinetq.ServiceProvider\Kinetq.ServiceProvider.csproj" />
   </ItemGroup>
 
 </Project>
