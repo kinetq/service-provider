@@ -4,9 +4,9 @@ using Kinetq.EntityFrameworkService.Helpers;
 using Kinetq.EntityFrameworkService.Interfaces;
 using Kinetq.EntityFrameworkService.Managers;
 using Kinetq.EntityFrameworkService.Resolvers;
-using Kinetq.EntityFrameworkService.Tests.Dtos;
-using Kinetq.EntityFrameworkService.Tests.Models;
-using Kinetq.EntityFrameworkService.Tests.Services;
+using Kinetq.ServiceProvider.Tests.Dtos;
+using Kinetq.ServiceProvider.Tests.Models;
+using Kinetq.ServiceProvider.Tests.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +15,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
-namespace Kinetq.EntityFrameworkService.Tests
+namespace Kinetq.ServiceProvider.Tests
 {
     public abstract class ATests : IAsyncLifetime
     {
@@ -36,7 +36,7 @@ namespace Kinetq.EntityFrameworkService.Tests
             ServiceCollection.AddSingleton<ISessionManager, SessionManager>();
             ServiceCollection.AddSingleton<IConfigurationManager<EFOptions>, ConfigurationManager>();
             ServiceCollection.AddScoped<ICustomerService, CustomerService>();
-            ServiceCollection.AddDataServices("Kinetq.EntityFrameworkService.Tests");
+            ServiceCollection.AddDataServices("Kinetq.ServiceProvider.Tests");
             ServiceCollection.AddLogging(builder => builder.AddConsole());
 
             ServiceCollection.Add(new ServiceDescriptor(typeof(IMapper), provider =>
@@ -59,10 +59,10 @@ namespace Kinetq.EntityFrameworkService.Tests
             ServiceProvider = ServiceCollection.BuildServiceProvider();
 
             var configManager = ServiceProvider.GetService<IConfigurationManager<EFOptions>>();
-
+            
             var configBuilder =
                 new DbContextOptionsBuilder()
-                    .UseInMemoryDatabase(databaseName: "Add_writes_to_database");
+                    .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString());
 
             configManager.AddConfiguration(new EFOptions
             {

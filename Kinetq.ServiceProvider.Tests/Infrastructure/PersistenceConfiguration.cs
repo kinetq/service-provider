@@ -1,9 +1,8 @@
 ﻿using Kinetq.EntityFrameworkService.Interfaces;
-using Kinetq.EntityFrameworkService.Tests.Models;
+using Kinetq.ServiceProvider.Tests.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
-namespace Kinetq.EntityFrameworkService.Tests.Infrastructure
+namespace Kinetq.ServiceProvider.Tests.Infrastructure
 {
     public class PersistenceConfiguration : IPersistanceConfiguration
     {

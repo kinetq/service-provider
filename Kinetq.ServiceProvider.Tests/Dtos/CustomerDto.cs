@@ -1,7 +1,6 @@
-﻿using AutoMapper;
-using Kinetq.EntityFrameworkService.Tests.Models;
+﻿using Kinetq.ServiceProvider.Tests.Models;
 
-namespace Kinetq.EntityFrameworkService.Tests.Dtos
+namespace Kinetq.ServiceProvider.Tests.Dtos
 {
     public class CustomerDto
     {

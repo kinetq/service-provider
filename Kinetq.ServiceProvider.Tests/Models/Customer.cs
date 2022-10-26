@@ -1,6 +1,6 @@
 ﻿using Kinetq.EntityFrameworkService.Interfaces;
 
-namespace Kinetq.EntityFrameworkService.Tests.Models
+namespace Kinetq.ServiceProvider.Tests.Models
 {
     public class Customer : IEntityWithTypedId<int>
     {

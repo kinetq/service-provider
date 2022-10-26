@@ -1,8 +1,8 @@
-﻿using Kinetq.EntityFrameworkService.Tests.Dtos;
-using Kinetq.EntityFrameworkService.Tests.Services;
+﻿using Kinetq.ServiceProvider.Tests.Dtos;
+using Kinetq.ServiceProvider.Tests.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Kinetq.EntityFrameworkService.Tests.Controllers;
+namespace Kinetq.ServiceProvider.Tests.Controllers;
 
 [ApiController]
 [Route("[controller]")]

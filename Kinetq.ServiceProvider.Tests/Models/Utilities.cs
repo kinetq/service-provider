@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Kinetq.EntityFrameworkService.Tests.Models
+namespace Kinetq.ServiceProvider.Tests.Models
 {
     [Flags]
     public enum Utilities : int

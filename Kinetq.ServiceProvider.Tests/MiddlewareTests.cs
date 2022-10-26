@@ -1,26 +1,25 @@
-﻿using Kinetq.EntityFrameworkService.Middleware;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Text;
 using System.Text.Json;
-using System.Text;
 using AutoFixture;
-using Kinetq.EntityFrameworkService.Interfaces;
-using Kinetq.EntityFrameworkService.Tests.Dtos;
-using Xunit;
 using AutoMapper;
 using Kinetq.EntityFrameworkService.Config;
 using Kinetq.EntityFrameworkService.Helpers;
+using Kinetq.EntityFrameworkService.Interfaces;
 using Kinetq.EntityFrameworkService.Managers;
+using Kinetq.EntityFrameworkService.Middleware;
 using Kinetq.EntityFrameworkService.Resolvers;
-using Kinetq.EntityFrameworkService.Tests.Models;
-using Kinetq.EntityFrameworkService.Tests.Services;
-using Microsoft.Extensions.Logging;
-using System.Text.Json.Serialization;
+using Kinetq.ServiceProvider.Tests.Dtos;
+using Kinetq.ServiceProvider.Tests.Models;
+using Kinetq.ServiceProvider.Tests.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Xunit;
 
-namespace Kinetq.EntityFrameworkService.Tests;
+namespace Kinetq.ServiceProvider.Tests;
 
 public class MiddlewareTests
 {
@@ -36,7 +35,7 @@ public class MiddlewareTests
                 services.AddSingleton<ISessionManager, SessionManager>();
                 services.AddSingleton<IConfigurationManager<EFOptions>, ConfigurationManager>();
                 services.AddScoped<ICustomerService, CustomerService>();
-                services.AddDataServices("Kinetq.EntityFrameworkService.Tests");
+                services.AddDataServices("Kinetq.ServiceProvider.Tests");
                 services.AddLogging(builder => builder.AddConsole());
                 services.AddRouting();
                 services.AddControllers();

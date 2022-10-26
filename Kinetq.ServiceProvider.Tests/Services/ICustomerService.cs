@@ -1,7 +1,7 @@
 ﻿using Kinetq.EntityFrameworkService.Interfaces;
-using Kinetq.EntityFrameworkService.Tests.Dtos;
+using Kinetq.ServiceProvider.Tests.Dtos;
 
-namespace Kinetq.EntityFrameworkService.Tests.Services
+namespace Kinetq.ServiceProvider.Tests.Services
 {
     public interface ICustomerService : IService<CustomerDto, int>
     {

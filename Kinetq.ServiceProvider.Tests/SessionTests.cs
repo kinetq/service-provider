@@ -1,10 +1,10 @@
 ﻿using Kinetq.EntityFrameworkService.Interfaces;
-using Kinetq.EntityFrameworkService.Tests.Models;
+using Kinetq.ServiceProvider.Tests.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Kinetq.EntityFrameworkService.Tests
+namespace Kinetq.ServiceProvider.Tests
 {
     public class SessionTests : ATests
     {

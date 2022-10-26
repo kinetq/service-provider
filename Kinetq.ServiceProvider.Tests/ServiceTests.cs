@@ -1,12 +1,12 @@
 ﻿using Kinetq.EntityFrameworkService.Builders;
 using Kinetq.EntityFrameworkService.Interfaces;
-using Kinetq.EntityFrameworkService.Tests.Models;
-using Kinetq.EntityFrameworkService.Tests.Services;
+using Kinetq.ServiceProvider.Tests.Models;
+using Kinetq.ServiceProvider.Tests.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Kinetq.EntityFrameworkService.Tests
+namespace Kinetq.ServiceProvider.Tests
 {
     public class ServiceTests : ATests
     {
@@ -73,11 +73,10 @@ namespace Kinetq.EntityFrameworkService.Tests
         [Fact]
         public async Task UpdateOneToMany()
         {
+            await AddCustomer();
             var session = ServiceProvider.GetService<ISessionManager>();
             var context = await session.GetSessionFrom(SessionKey);
             var service = ServiceProvider.GetService<ICustomerService>();
-
-            await AddCustomer();
 
             var customerDto = await service.GetAsync(1);
             customerDto.OrderIds = new List<int>();

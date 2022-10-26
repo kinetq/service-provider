@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
+using Kinetq.EntityFrameworkService;
 using Kinetq.EntityFrameworkService.Builders;
 using Kinetq.EntityFrameworkService.Helpers;
 using Kinetq.EntityFrameworkService.Interfaces;
-using Kinetq.EntityFrameworkService.Tests.Dtos;
-using Kinetq.EntityFrameworkService.Tests.Models;
+using Kinetq.ServiceProvider.Tests.Dtos;
+using Kinetq.ServiceProvider.Tests.Models;
 using Microsoft.Extensions.Logging;
 
-namespace Kinetq.EntityFrameworkService.Tests.Services
+namespace Kinetq.ServiceProvider.Tests.Services
 {
     public class CustomerService : KinetqServiceProvider<CustomerDto, Customer, int>, ICustomerService
     {
