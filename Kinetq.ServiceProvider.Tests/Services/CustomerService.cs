@@ -18,11 +18,6 @@ namespace Kinetq.ServiceProvider.Tests.Services
         {
         }
 
-        protected override IQueryable<Customer> Include(IQueryable<Customer> query)
-        {
-            return query;
-        }
-
         protected override string SessionKey => "Kinetq.EntityFrameworkService.Tests";
 
         public IQueryable<Customer> NameEquals(IQueryable<Customer> query, Filter filter)

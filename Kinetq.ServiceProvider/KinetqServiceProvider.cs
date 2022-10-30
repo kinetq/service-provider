@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Reflection;
+using AutoMapper;
+using Kinetq.ServiceProvider.Attributes;
 using Kinetq.ServiceProvider.Builders;
 using Kinetq.ServiceProvider.Helpers;
 using Kinetq.ServiceProvider.Interfaces;
@@ -31,10 +33,20 @@ namespace Kinetq.ServiceProvider
             get
             {
                 var @type = GetType();
-                var methods =
-                    @type.GetMethodsBySig(typeof(IQueryable<TEntity>), typeof(IQueryable<TEntity>), typeof(Filter));
+                var assembly = Assembly.GetAssembly(@type);
+                var filters = assembly.ExportedTypes.Where(x =>
+                {
+                    var attribute = x.GetCustomAttribute<ServiceProviderAttribute>();
+                    if (attribute == null) return false;
 
-                return methods.Select(x => (Func<IQueryable<TEntity>, Filter, IQueryable<TEntity>>)x.CreateDelegate(typeof(Func<IQueryable<TEntity>, Filter, IQueryable<TEntity>>), this)).ToList();
+                    return attribute.EntityType == typeof(TEntity);
+                });
+
+                var methods =
+                    filters.SelectMany(x =>
+                        x.GetMethodsBySig(typeof(IQueryable<TEntity>), typeof(IQueryable<TEntity>), typeof(Filter)));
+
+                return methods.Select(x => (Func<IQueryable<TEntity>, Filter, IQueryable<TEntity>>)x.CreateDelegate(typeof(Func<IQueryable<TEntity>, Filter, IQueryable<TEntity>>))).ToList();
             }
         }
 
@@ -43,14 +55,45 @@ namespace Kinetq.ServiceProvider
             get
             {
                 var @type = GetType();
-                var methods =
-                    @type.GetMethodsBySig(typeof(IEnumerable<TEntity>), typeof(IQueryable<TEntity>), typeof(IList<Filter>));
+                var assembly = Assembly.GetAssembly(@type);
+                var filters = assembly.ExportedTypes.Where(x =>
+                {
+                    var attribute = x.GetCustomAttribute<ServiceProviderAttribute>();
+                    if (attribute == null) return false;
 
-                return methods.Select(x => (Func<IQueryable<TEntity>, IList<Filter>, IEnumerable<TEntity>>)x.CreateDelegate(typeof(Func<IQueryable<TEntity>, IList<Filter>, IEnumerable<TEntity>>), this)).SingleOrDefault();
+                    return attribute.EntityType == typeof(TEntity);
+                });
+
+                var methods =
+                    filters.SelectMany(x =>
+                        x.GetMethodsBySig(typeof(IEnumerable<TEntity>), typeof(IQueryable<TEntity>), typeof(IList<Filter>)));
+
+                return methods.Select(x => (Func<IQueryable<TEntity>, IList<Filter>, IEnumerable<TEntity>>)x.CreateDelegate(typeof(Func<IQueryable<TEntity>, IList<Filter>, IEnumerable<TEntity>>))).SingleOrDefault();
+            }
+        }        
+        
+        private Func<IQueryable<TEntity>, IQueryable<TEntity>> IncludeProvider
+        {
+            get
+            {
+                var @type = GetType();
+                var assembly = Assembly.GetAssembly(@type);
+                var filters = assembly.ExportedTypes.Where(x =>
+                {
+                    var attribute = x.GetCustomAttribute<ServiceProviderAttribute>();
+                    if (attribute == null) return false;
+
+                    return attribute.EntityType == typeof(TEntity);
+                });
+
+                var methods =
+                    filters.SelectMany(x =>
+                        x.GetMethodsBySig(typeof(IQueryable<TEntity>), typeof(IQueryable<TEntity>)));
+
+                return methods.Select(x => (Func<IQueryable<TEntity>, IQueryable<TEntity>>)x.CreateDelegate(typeof(Func<IQueryable<TEntity>, IQueryable<TEntity>>))).SingleOrDefault();
             }
         }
 
-        protected abstract IQueryable<TEntity> Include(IQueryable<TEntity> query);
         protected abstract string SessionKey { get; }
         protected KinetqContext Session => _sessionManager.GetSessionFrom(SessionKey).Result; 
         protected ILogger Logger => CreateLogger();
@@ -146,7 +189,7 @@ namespace Kinetq.ServiceProvider
             {
                 IQueryable<TEntity> entities = Session.Set<TEntity>();
 
-                entities = Include(entities);
+                entities = IncludeProvider(entities);
 
                 return _mapper.Map<List<TEntity>, List<TDto>>(await entities.ToListAsync(), opt => opt.Items["SessionKey"] = SessionKey);
             }
@@ -173,7 +216,7 @@ namespace Kinetq.ServiceProvider
         private async Task<TEntity> GetEntityAsync(TId id)
         {
             IQueryable<TEntity> entities = Session.Set<TEntity>();
-            entities = Include(entities);
+            entities = IncludeProvider(entities);
 
             var entity = await entities.FirstAsync(x => x.Id.Equals(id));
             return entity;
@@ -273,7 +316,7 @@ namespace Kinetq.ServiceProvider
                 }
             }
 
-            query = Include(query);
+            query = IncludeProvider(query);
 
             try
             {
