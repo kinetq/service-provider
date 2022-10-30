@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Kinetq.EntityFrameworkService.Interfaces;
+using Kinetq.ServiceProvider.Interfaces;
 
-namespace Kinetq.EntityFrameworkService.Resolvers
+namespace Kinetq.ServiceProvider.Resolvers
 {
     public class ProxyResolver<T, TId> : IMemberValueResolver<object, object, TId, T> where T : class, IEntityWithTypedId<TId>
     {

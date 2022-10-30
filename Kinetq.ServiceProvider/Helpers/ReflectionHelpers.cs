@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace MyPericarditis.Core.Helpers
+namespace Kinetq.ServiceProvider.Helpers
 {
     public static class ReflectionHelpers
     {

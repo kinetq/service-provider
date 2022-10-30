@@ -1,13 +1,12 @@
 ﻿using System.Reflection;
-using Kinetq.EntityFrameworkService.Config;
-using Kinetq.EntityFrameworkService.Interfaces;
-using Kinetq.EntityFrameworkService.Managers;
-using Kinetq.EntityFrameworkService.Resolvers;
+using Kinetq.ServiceProvider.Config;
+using Kinetq.ServiceProvider.Interfaces;
+using Kinetq.ServiceProvider.Managers;
+using Kinetq.ServiceProvider.Resolvers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using MyPericarditis.Core.Helpers;
 
-namespace Kinetq.EntityFrameworkService.Helpers
+namespace Kinetq.ServiceProvider.Helpers
 {
     public static class ServicesConfigurationHelpers
     {

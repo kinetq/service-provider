@@ -1,7 +1,7 @@
-﻿using Kinetq.EntityFrameworkService.Interfaces;
-using Kinetq.EntityFrameworkService.ResultModels;
+﻿using Kinetq.ServiceProvider.Interfaces;
+using Kinetq.ServiceProvider.ResultModels;
 
-namespace Kinetq.EntityFrameworkService.Builders
+namespace Kinetq.ServiceProvider.Builders
 {
     public class FilterBuilder<TDto, TId>
     {

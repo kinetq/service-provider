@@ -1,5 +1,5 @@
-﻿using Kinetq.EntityFrameworkService.Builders;
-using Kinetq.EntityFrameworkService.Interfaces;
+﻿using Kinetq.ServiceProvider.Builders;
+using Kinetq.ServiceProvider.Interfaces;
 using Kinetq.ServiceProvider.Tests.Models;
 using Kinetq.ServiceProvider.Tests.Services;
 using Microsoft.EntityFrameworkCore;

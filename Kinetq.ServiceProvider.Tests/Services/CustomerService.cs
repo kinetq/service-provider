@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Kinetq.EntityFrameworkService;
-using Kinetq.EntityFrameworkService.Builders;
-using Kinetq.EntityFrameworkService.Helpers;
-using Kinetq.EntityFrameworkService.Interfaces;
+using Kinetq.ServiceProvider.Builders;
+using Kinetq.ServiceProvider.Helpers;
+using Kinetq.ServiceProvider.Interfaces;
 using Kinetq.ServiceProvider.Tests.Dtos;
 using Kinetq.ServiceProvider.Tests.Models;
 using Microsoft.Extensions.Logging;

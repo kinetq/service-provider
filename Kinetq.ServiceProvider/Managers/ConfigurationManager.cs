@@ -1,9 +1,8 @@
-﻿using Kinetq.EntityFrameworkService.Config;
-using Kinetq.EntityFrameworkService.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Kinetq.ServiceProvider.Config;
+using Kinetq.ServiceProvider.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace Kinetq.EntityFrameworkService.Managers
+namespace Kinetq.ServiceProvider.Managers
 {
     public class ConfigurationManager : IConfigurationManager<EFOptions>
     {

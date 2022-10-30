@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Kinetq.EntityFrameworkService.Interfaces
+namespace Kinetq.ServiceProvider.Interfaces
 {
     public interface IPersistanceConfiguration
     {

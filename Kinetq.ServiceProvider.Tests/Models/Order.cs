@@ -1,4 +1,4 @@
-﻿using Kinetq.EntityFrameworkService.Interfaces;
+﻿using Kinetq.ServiceProvider.Interfaces;
 
 namespace Kinetq.ServiceProvider.Tests.Models
 {

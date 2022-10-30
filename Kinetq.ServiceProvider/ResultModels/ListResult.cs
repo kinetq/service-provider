@@ -1,4 +1,4 @@
-﻿namespace Kinetq.EntityFrameworkService.ResultModels
+﻿namespace Kinetq.ServiceProvider.ResultModels
 {
     public class ListResult<T>
     {

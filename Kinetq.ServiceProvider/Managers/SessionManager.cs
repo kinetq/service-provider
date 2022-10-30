@@ -1,8 +1,8 @@
-﻿using Kinetq.EntityFrameworkService.Config;
-using Kinetq.EntityFrameworkService.Interfaces;
+﻿using Kinetq.ServiceProvider.Config;
+using Kinetq.ServiceProvider.Interfaces;
 using Microsoft.AspNetCore.Http;
 
-namespace Kinetq.EntityFrameworkService.Managers
+namespace Kinetq.ServiceProvider.Managers
 {
     public class SessionManager : ISessionManager
     {

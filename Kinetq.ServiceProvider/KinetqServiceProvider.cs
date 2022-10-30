@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Kinetq.EntityFrameworkService.Builders;
-using Kinetq.EntityFrameworkService.Interfaces;
-using Kinetq.EntityFrameworkService.ResultModels;
+using Kinetq.ServiceProvider.Builders;
+using Kinetq.ServiceProvider.Helpers;
+using Kinetq.ServiceProvider.Interfaces;
+using Kinetq.ServiceProvider.ResultModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MyPericarditis.Core.Helpers;
 
-namespace Kinetq.EntityFrameworkService
+namespace Kinetq.ServiceProvider
 {
     public abstract class KinetqServiceProvider<TDto, TEntity, TId> : IService<TDto, TId>
         where TDto : class

@@ -1,4 +1,4 @@
-﻿namespace Kinetq.EntityFrameworkService.Interfaces
+﻿namespace Kinetq.ServiceProvider.Interfaces
 {
     public interface IEntity<TId> : IEntityWithTypedId<TId>
     {

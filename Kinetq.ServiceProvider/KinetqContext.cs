@@ -1,7 +1,7 @@
-﻿using Kinetq.EntityFrameworkService.Interfaces;
+﻿using Kinetq.ServiceProvider.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Kinetq.EntityFrameworkService;
+namespace Kinetq.ServiceProvider;
 
 public class KinetqContext : DbContext
 {

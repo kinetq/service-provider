@@ -1,4 +1,4 @@
-﻿namespace Kinetq.EntityFrameworkService.Builders
+﻿namespace Kinetq.ServiceProvider.Builders
 {
     public class Filter
     {

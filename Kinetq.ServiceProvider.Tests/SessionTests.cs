@@ -1,4 +1,4 @@
-﻿using Kinetq.EntityFrameworkService.Interfaces;
+﻿using Kinetq.ServiceProvider.Interfaces;
 using Kinetq.ServiceProvider.Tests.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

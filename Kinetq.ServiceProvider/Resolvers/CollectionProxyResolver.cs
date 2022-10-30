@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Kinetq.EntityFrameworkService.Interfaces;
+using Kinetq.ServiceProvider.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Kinetq.EntityFrameworkService.Resolvers
+namespace Kinetq.ServiceProvider.Resolvers
 {
     public class CollectionProxyResolver<T, TId> : IMemberValueResolver<object, object, IEnumerable<TId>, IList<T>> 
         where T : class, IEntityWithTypedId<TId>

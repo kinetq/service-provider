@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
-using Kinetq.EntityFrameworkService.Builders;
+using Kinetq.ServiceProvider.Builders;
 
-namespace Kinetq.EntityFrameworkService.Helpers
+namespace Kinetq.ServiceProvider.Helpers
 {
     public static class FilterHelpers
     {

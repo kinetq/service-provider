@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Kinetq.EntityFrameworkService.Config
+namespace Kinetq.ServiceProvider.Config
 {
     public class EFOptions
     {

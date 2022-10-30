@@ -1,7 +1,7 @@
-﻿using Kinetq.EntityFrameworkService.Builders;
-using Kinetq.EntityFrameworkService.ResultModels;
+﻿using Kinetq.ServiceProvider.Builders;
+using Kinetq.ServiceProvider.ResultModels;
 
-namespace Kinetq.EntityFrameworkService.Interfaces
+namespace Kinetq.ServiceProvider.Interfaces
 {
     public interface IService<TDto, TId>
     {
