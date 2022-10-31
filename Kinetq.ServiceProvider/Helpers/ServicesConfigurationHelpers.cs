@@ -20,7 +20,7 @@ namespace Kinetq.ServiceProvider.Helpers
 
             foreach (var persistenceConfiguration in persistenceConfigurations)
             {
-                services.AddScoped(typeof(IPersistanceConfiguration), persistenceConfiguration);
+                services.AddSingleton(typeof(IPersistanceConfiguration), persistenceConfiguration);
             }
             
             var modelTypes = moduleAssembly.GetTypesInNamespace($"{@namespace}.Models").ToList();
