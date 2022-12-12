@@ -316,7 +316,7 @@ namespace Kinetq.ServiceProvider
                 }
             }
 
-            query = IncludeProvider(query);
+            query = IncludeProvider != null ? IncludeProvider(query) : query;
 
             try
             {
