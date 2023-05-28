@@ -20,7 +20,7 @@ public static class CustomerFilters
         return query;
     }
 
-    public static IEnumerable<Customer> Project(IQueryable<Customer> query, IList<Filter> filters)
+    public static IEnumerable<Customer> Project(IQueryable<Customer> query, IList<Filter> filters, KinetqContext context)
     {
         return query.Select(x => new Customer()
         {
