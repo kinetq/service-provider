@@ -45,6 +45,12 @@ namespace Kinetq.ServiceProvider.Builders
             return result.Entities;
         }
 
+        public async Task<TDto> FirstOrDefault()
+        {
+            var result = await _service.GetByFilters(_filters, _page, _pageSize);
+            return result.Entities.FirstOrDefault();
+        }
+
         public async Task<bool> Any()
         {
             var result = await _service.GetByFilters(_filters, _page, _pageSize);
