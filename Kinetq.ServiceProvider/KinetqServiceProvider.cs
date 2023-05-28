@@ -129,7 +129,8 @@ namespace Kinetq.ServiceProvider
             IList<TDto> result = new List<TDto>();
             foreach (var dto in dtos)
             {
-                var id = typeof(TDto).GetProperty("Id").GetValue(dto);
+                TId id = (TId)typeof(TDto).GetProperty("Id").GetValue(dto);
+
                 if (id.EqualsDefaultValue())
                 {
                     result.Add(await CreateAsync(dto));
