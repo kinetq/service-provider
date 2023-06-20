@@ -1,5 +1,6 @@
 ﻿using Kinetq.ServiceProvider.Builders;
 using Kinetq.ServiceProvider.Interfaces;
+using Kinetq.ServiceProvider.Tests.Filters;
 using Kinetq.ServiceProvider.Tests.Models;
 using Kinetq.ServiceProvider.Tests.Services;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ namespace Kinetq.ServiceProvider.Tests
             
             var hasCustomers =
                 await service.GetByFilters()
-                    .Where(Filter.Of(nameof(CustomerService.NameEquals), "Sam"))
+                    .Where(Filter.Of(nameof(CustomerFilters.NameEquals), "Sam"))
                     .Any();
 
             Assert.True(hasCustomers);
@@ -32,7 +33,7 @@ namespace Kinetq.ServiceProvider.Tests
 
             var customers =
                 await service.GetByFilters()
-                    .Where(Filter.Of(nameof(CustomerService.NameEquals), "Sam"))
+                    .Where(Filter.Of(nameof(CustomerFilters.NameEquals), "Sam"))
                     .Entities();
 
             Assert.NotNull(customers);

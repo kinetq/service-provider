@@ -35,7 +35,13 @@ namespace Kinetq.ServiceProvider.Helpers
                 services.AddSingleton(collectionProxyType);
             }
 
-            services.AddScoped<IKinetqComposer, KinetqComposer>();
+            var composers = moduleAssembly.GetTypesThatImplInterface(typeof(IComposer));
+            foreach (var composer in composers)
+            {
+                services.AddTransient(typeof(IComposer), composer);
+            }
+
+            services.AddTransient<IKinetqComposer, KinetqComposer>();
         }
     }
 }

@@ -6,7 +6,8 @@ namespace Kinetq.ServiceProvider.Tests.Composers;
 
 public class CustomerCountComposer : ComposerBuilder<int>, IComposer
 {
-    public CustomerCountComposer(IServiceProvider serviceProvider, ISessionManager sessionManager) : base(serviceProvider, sessionManager)
+    public CustomerCountComposer(ISessionManager sessionManager, IEnumerable<IKinetqService> services) 
+        : base( sessionManager, services)
     {
         For<CustomerDto, int>()
             .Operation(service => service.GetAllAsync())

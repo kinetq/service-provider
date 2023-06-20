@@ -6,9 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Kinetq.ServiceProvider.Tests.Services
 {
-    public class CustomerService : KinetqServiceProvider<CustomerDto, Customer, int>, ICustomerService
+    public class OrderService : KinetqServiceProvider<OrderDto, Order, int>, IOrderService
     {
-        public CustomerService(
+        public OrderService(
             ISessionManager sessionManager, 
             ILoggerFactory loggerFactory, 
             IMapper mapper) 

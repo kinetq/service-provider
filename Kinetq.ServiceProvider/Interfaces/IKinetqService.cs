@@ -1,6 +1,6 @@
 ﻿namespace Kinetq.ServiceProvider.Interfaces;
 
-public interface IInjectableService
+public interface IKinetqService
 {
     
 }

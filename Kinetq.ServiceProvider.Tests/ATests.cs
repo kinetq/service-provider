@@ -32,13 +32,10 @@ namespace Kinetq.ServiceProvider.Tests
             var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
             mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(new DefaultHttpContext());
             ServiceCollection.AddSingleton(mockHttpContextAccessor.Object);
-
-
-            ServiceCollection.AddSingleton<ISessionManager, SessionManager>();
-            ServiceCollection.AddSingleton<IConfigurationManager<EFOptions>, ConfigurationManager>();
+            
             ServiceCollection.AddScoped<ICustomerService, CustomerService>();
-            ServiceCollection.AddScoped<IKinetqComposer, KinetqComposer>();
-            ServiceCollection.AddScoped<IComposer, CustomerCountComposer>();
+            ServiceCollection.AddScoped<IKinetqService, CustomerService>();
+            ServiceCollection.AddScoped<IKinetqService, OrderService>();
             ServiceCollection.AddDataServices("Kinetq.ServiceProvider.Tests");
             ServiceCollection.AddLogging(builder => builder.AddConsole());
 
@@ -47,6 +44,9 @@ namespace Kinetq.ServiceProvider.Tests
                 var config = new MapperConfiguration(cfg =>
                 {
                     cfg.ConstructServicesUsing(provider.GetService);
+
+                    cfg.CreateMap<OrderDto, Order>();
+                    cfg.CreateMap<Order, OrderDto>();
 
                     cfg.CreateMap<CustomerDto, Customer>()
                         .ForMember(dst => dst.Orders,
