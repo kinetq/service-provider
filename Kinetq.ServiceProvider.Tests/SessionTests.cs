@@ -12,14 +12,14 @@ namespace Kinetq.ServiceProvider.Tests
         public async Task Test_Add_Entity()
         {
             var session = ServiceProvider.GetService<ISessionManager>();
-            var context = await session.GetSessionFrom(SessionKey);
+            var context = session.GetSessionFrom(SessionKey);
 
             var dbSet = context.Set<Customer>();
             dbSet.Add(new Customer { FirstName = "Sam", LastName = "Sinno", Id = 1 });
             context.SaveChanges();
             session.CloseSessionOn(SessionKey);
 
-            var context1 = await session.GetSessionFrom(SessionKey);
+            var context1 = session.GetSessionFrom(SessionKey);
             var dbSet1 = context1.Set<Customer>();
 
             var customer = dbSet1.Find(1);
@@ -30,14 +30,14 @@ namespace Kinetq.ServiceProvider.Tests
         public async Task Test_Update_Entity()
         {
             var session = ServiceProvider.GetService<ISessionManager>();
-            var context = await session.GetSessionFrom(SessionKey);
+            var context = session.GetSessionFrom(SessionKey);
 
             var dbSet = context.Set<Customer>();
             dbSet.Add(new Customer { FirstName = "Sam", LastName = "Sinno", Id = 1 });
             context.SaveChanges();
             session.CloseSessionOn(SessionKey);
 
-            var context1 = await session.GetSessionFrom(SessionKey);
+            var context1 = session.GetSessionFrom(SessionKey);
             var dbSet1 = context1.Set<Customer>();
 
             var customer = dbSet1.Find(1);
@@ -56,7 +56,7 @@ namespace Kinetq.ServiceProvider.Tests
         public async Task Test_Multiple_Enum()
         {
             var session = ServiceProvider.GetService<ISessionManager>();
-            var context = await session.GetSessionFrom(SessionKey);
+            var context = session.GetSessionFrom(SessionKey);
 
             var dbSet = context.Set<Customer>();
             var newCustomer = new Customer
@@ -72,7 +72,7 @@ namespace Kinetq.ServiceProvider.Tests
             context.SaveChanges();
             session.CloseSessionOn(SessionKey);
 
-            var context1 = await session.GetSessionFrom(SessionKey);
+            var context1 = session.GetSessionFrom(SessionKey);
             var dbSet1 = context1.Set<Customer>();
 
             var customer = dbSet1.Find(1);

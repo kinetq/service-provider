@@ -10,37 +10,6 @@ namespace Kinetq.ServiceProvider.Tests
 {
     public class ServiceTests : ATests
     {
-        private async Task AddCustomer()
-        {
-            var session = ServiceProvider.GetService<ISessionManager>();
-            var context = await session.GetSessionFrom(SessionKey);
-
-            var dbSet = context.Set<Customer>();
-            var newCustomer = new Customer
-            {
-                FirstName = "Sam",
-                LastName = "Sinno",
-                Id = 1,
-                Utilities = Utilities.CableInternet | Utilities.Electricity,
-                Orders = new List<Order>
-                {
-                    new Order
-                    {
-                        Id = 1,
-                        Name = "Test Order"
-                    },
-                    new Order
-                    {
-                        Id = 2,
-                        Name = "Test Order"
-                    }
-                }
-            };
-
-            dbSet.Add(newCustomer);
-            await context.SaveChangesAsync();
-        }
-
         [Fact]
         public async Task CheckAnyByFilterBuilder()
         {
@@ -75,7 +44,7 @@ namespace Kinetq.ServiceProvider.Tests
         {
             await AddCustomer();
             var session = ServiceProvider.GetService<ISessionManager>();
-            var context = await session.GetSessionFrom(SessionKey);
+            var context = session.GetSessionFrom(SessionKey);
             var service = ServiceProvider.GetService<ICustomerService>();
 
             var customerDto = await service.GetAsync(1);

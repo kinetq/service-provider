@@ -15,7 +15,7 @@ namespace Kinetq.ServiceProvider.Resolvers
         public T Resolve(object source, object destination, TId sourceMember, T destMember, ResolutionContext context)
         {
             string sessionFactoryName = (string)context.Items["SessionKey"];
-            KinetqContext dbContext = _sessionManager.GetSessionFrom(sessionFactoryName).Result;
+            KinetqContext dbContext = _sessionManager.GetSessionFrom(sessionFactoryName);
 
             if (sourceMember.Equals(default(TId)))
             {

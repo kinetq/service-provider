@@ -34,6 +34,8 @@ namespace Kinetq.ServiceProvider.Helpers
                 services.AddSingleton(proxyType);
                 services.AddSingleton(collectionProxyType);
             }
+
+            services.AddScoped<IKinetqComposer, KinetqComposer>();
         }
     }
 }

@@ -4,6 +4,7 @@ using Kinetq.ServiceProvider.Helpers;
 using Kinetq.ServiceProvider.Interfaces;
 using Kinetq.ServiceProvider.Managers;
 using Kinetq.ServiceProvider.Resolvers;
+using Kinetq.ServiceProvider.Tests.Composers;
 using Kinetq.ServiceProvider.Tests.Dtos;
 using Kinetq.ServiceProvider.Tests.Models;
 using Kinetq.ServiceProvider.Tests.Services;
@@ -36,6 +37,8 @@ namespace Kinetq.ServiceProvider.Tests
             ServiceCollection.AddSingleton<ISessionManager, SessionManager>();
             ServiceCollection.AddSingleton<IConfigurationManager<EFOptions>, ConfigurationManager>();
             ServiceCollection.AddScoped<ICustomerService, CustomerService>();
+            ServiceCollection.AddScoped<IKinetqComposer, KinetqComposer>();
+            ServiceCollection.AddScoped<IComposer, CustomerCountComposer>();
             ServiceCollection.AddDataServices("Kinetq.ServiceProvider.Tests");
             ServiceCollection.AddLogging(builder => builder.AddConsole());
 
@@ -71,10 +74,41 @@ namespace Kinetq.ServiceProvider.Tests
             });
         }
 
+        protected async Task AddCustomer()
+        {
+            var session = ServiceProvider.GetService<ISessionManager>();
+            var context = session.GetSessionFrom(SessionKey);
+
+            var dbSet = context.Set<Customer>();
+            var newCustomer = new Customer
+            {
+                FirstName = "Sam",
+                LastName = "Sinno",
+                Id = 1,
+                Utilities = Utilities.CableInternet | Utilities.Electricity,
+                Orders = new List<Order>
+                {
+                    new Order
+                    {
+                        Id = 1,
+                        Name = "Test Order"
+                    },
+                    new Order
+                    {
+                        Id = 2,
+                        Name = "Test Order"
+                    }
+                }
+            };
+
+            dbSet.Add(newCustomer);
+            await context.SaveChangesAsync();
+        }
+
         public async Task DisposeAsync()
         {
             var session = ServiceProvider.GetService<ISessionManager>();
-            var context = await session.GetSessionFrom(SessionKey);
+            var context = session.GetSessionFrom(SessionKey);
 
             context.Database.EnsureDeleted();
             session.CloseSessionOn(SessionKey);

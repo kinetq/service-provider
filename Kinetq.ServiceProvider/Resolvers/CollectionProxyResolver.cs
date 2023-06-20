@@ -23,7 +23,7 @@ namespace Kinetq.ServiceProvider.Resolvers
             }
 
             string sessionKey = (string)context.Items["SessionKey"];
-            KinetqContext dbContext = _sessionManager.GetSessionFrom(sessionKey).Result;
+            KinetqContext dbContext = _sessionManager.GetSessionFrom(sessionKey);
 
             DbSet<T> set = dbContext.Set<T>();
             entityList.AddRange(set.Where(x => sourceMember.Contains(x.Id)));

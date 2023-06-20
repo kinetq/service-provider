@@ -23,7 +23,7 @@ namespace Kinetq.ServiceProvider.Managers
             _persistanceConfigurations = persistanceConfigurations;
         }
 
-        public async Task<KinetqContext> GetSessionFrom(string sessionKey)
+        public KinetqContext GetSessionFrom(string sessionKey)
         {
             if (!ContextSessions.TryGetValue(sessionKey, out var context))
             {

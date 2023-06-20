@@ -95,7 +95,7 @@ namespace Kinetq.ServiceProvider
         }
 
         protected abstract string SessionKey { get; }
-        protected KinetqContext Session => _sessionManager.GetSessionFrom(SessionKey).Result; 
+        protected KinetqContext Session => _sessionManager.GetSessionFrom(SessionKey); 
         protected ILogger Logger => CreateLogger();
         protected virtual ILogger CreateLogger()
         {

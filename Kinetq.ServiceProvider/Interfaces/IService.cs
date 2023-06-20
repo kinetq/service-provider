@@ -3,7 +3,7 @@ using Kinetq.ServiceProvider.ResultModels;
 
 namespace Kinetq.ServiceProvider.Interfaces
 {
-    public interface IService<TDto, TId>
+    public interface IService<TDto, TId> : IInjectableService
     {
         Task<TDto> CreateAsync(TDto dto);
         Task<IList<TDto>> UpsertAsync(IList<TDto> dtos);
