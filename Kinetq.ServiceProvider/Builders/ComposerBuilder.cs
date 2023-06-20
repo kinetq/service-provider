@@ -43,7 +43,11 @@ public class ComposerBuilder<TResult>
     {
         _resultFunc = () =>
         {
-            var results = _serviceBuilders.SelectMany(x => x.Results);
+            var results = 
+                _serviceBuilders
+                    .SelectMany(x => x.Results)
+                    .Select(x => x.HasRun ? x.Value : x.OperationFunc());
+
             Task.WaitAll(results.ToArray());
 
             T1 arg = ((Task<T1>)results.First(x => x.GetType() == typeof(Task<T1>))).Result;
@@ -57,7 +61,11 @@ public class ComposerBuilder<TResult>
     {
         _resultFunc = () =>
         {
-            var results = _serviceBuilders.SelectMany(x => x.Results);
+            var results =
+                _serviceBuilders
+                    .SelectMany(x => x.Results)
+                    .Select(x => x.HasRun ? x.Value : x.OperationFunc());
+
             Task.WaitAll(results.ToArray());
 
             T1 arg = ((Task<T1>)results.First(x => x.GetType() == typeof(Task<T1>))).Result;
@@ -72,7 +80,11 @@ public class ComposerBuilder<TResult>
     {
         _resultFunc = () =>
         {
-            var results = _serviceBuilders.SelectMany(x => x.Results);
+            var results =
+                _serviceBuilders
+                    .SelectMany(x => x.Results)
+                    .Select(x => x.HasRun ? x.Value : x.OperationFunc());
+
             Task.WaitAll(results.ToArray());
 
             T1 arg = ((Task<T1>)results.First(x => x.GetType() == typeof(Task<T1>))).Result;
@@ -88,7 +100,11 @@ public class ComposerBuilder<TResult>
     {
         _resultFunc = () =>
         {
-            var results = _serviceBuilders.SelectMany(x => x.Results);
+            var results =
+                _serviceBuilders
+                    .SelectMany(x => x.Results)
+                    .Select(x => x.HasRun ? x.Value : x.OperationFunc());
+
             Task.WaitAll(results.ToArray());
 
             T1 arg = ((Task<T1>)results.First(x => x.GetType() == typeof(Task<T1>))).Result;
