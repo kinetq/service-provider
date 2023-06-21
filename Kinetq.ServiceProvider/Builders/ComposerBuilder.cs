@@ -9,8 +9,8 @@ public class ComposerBuilder<TResult>
     private readonly IEnumerable<IKinetqService> _services; 
     private readonly ISessionManager _sessionManager;
 
-    private IDbContextTransaction? _transaction = null;
     private Func<TResult> _resultFunc;
+    protected IDbContextTransaction Transaction { get; set; }
 
     public ComposerBuilder(ISessionManager sessionManager, IEnumerable<IKinetqService> services)
     {
@@ -25,7 +25,7 @@ public class ComposerBuilder<TResult>
         var service = _services.First(x => type.IsInstanceOfType(x));
 
         var previousResults = _serviceBuilders.SelectMany(x => x.Results).ToList();
-        var serviceBuilder = new ServiceBuilder<TDto, TId, TResult>(service, this, _transaction, previousResults);
+        var serviceBuilder = new ServiceBuilder<TDto, TId, TResult>(service, this, previousResults);
         _serviceBuilders.Add(serviceBuilder);
 
         return serviceBuilder;
@@ -34,7 +34,7 @@ public class ComposerBuilder<TResult>
     public ComposerBuilder<TResult> WithTransactionFor(string sessionName)
     {
         var session = _sessionManager.GetSessionFrom(sessionName);
-        _transaction = session.Database.BeginTransaction();
+        Transaction = session.Database.BeginTransaction();
 
         return this;
     }
@@ -119,11 +119,6 @@ public class ComposerBuilder<TResult>
 
     public TResult Execute()
     {
-        if (_transaction != null)
-        {
-            _transaction.Commit();
-        }
-
         return _resultFunc();
     }
 }
