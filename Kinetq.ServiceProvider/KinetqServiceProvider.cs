@@ -4,6 +4,7 @@ using Kinetq.ServiceProvider.Attributes;
 using Kinetq.ServiceProvider.Builders;
 using Kinetq.ServiceProvider.Helpers;
 using Kinetq.ServiceProvider.Interfaces;
+using Kinetq.ServiceProvider.Models;
 using Kinetq.ServiceProvider.ResultModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -144,19 +145,29 @@ namespace Kinetq.ServiceProvider
             return result;
         }
 
-        public virtual async Task<bool> DeleteAsync(TId id)
+        public virtual async Task<DeleteResult<TDto>> DeleteAsync(TId id)
         {
             try
             {
                 var entity = await Session.Set<TEntity>().FindAsync(id);
                 Session.Set<TEntity>().Remove(entity);
 
-                return await Session.SaveChangesAsync() > -1;
+                var result = await Session.SaveChangesAsync() > -1;
+
+                return new DeleteResult<TDto>()
+                {
+                    DeletedEntity = _mapper.Map<TEntity, TDto>(entity),
+                    Result = result
+                };
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, "Could not delete dto");
-                return false;
+                return new DeleteResult<TDto>()
+                {
+                    DeletedEntity = null,
+                    Result = false
+                };
             }
         }
 
@@ -268,8 +279,8 @@ namespace Kinetq.ServiceProvider
             {
                 foreach (var id in ids)
                 {
-                    bool deleted = await DeleteAsync(id);
-                    if (!deleted)
+                    var deleteResult = await DeleteAsync(id);
+                    if (!deleteResult.Result)
                     {
                         throw new Exception($"Could not delete dto for id {id}");
                     }

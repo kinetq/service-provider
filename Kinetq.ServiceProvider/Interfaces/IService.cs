@@ -1,4 +1,5 @@
 ﻿using Kinetq.ServiceProvider.Builders;
+using Kinetq.ServiceProvider.Models;
 using Kinetq.ServiceProvider.ResultModels;
 
 namespace Kinetq.ServiceProvider.Interfaces
@@ -7,7 +8,7 @@ namespace Kinetq.ServiceProvider.Interfaces
     {
         Task<TDto> CreateAsync(TDto dto);
         Task<IList<TDto>> UpsertAsync(IList<TDto> dtos);
-        Task<bool> DeleteAsync(TId id);
+        Task<DeleteResult<TDto>> DeleteAsync(TId id);
         Task<TDto> UpdateAsync(TDto dto);
         Task<List<TDto>> GetAllAsync();
         Task<TDto> GetAsync(TId id);
