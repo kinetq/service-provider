@@ -69,7 +69,7 @@ namespace Kinetq.ServiceProvider
                     filters.SelectMany(x =>
                         x.GetMethodsBySig(typeof(IQueryable<TEntity>), typeof(IQueryable<TEntity>), typeof(IList<Filter>), typeof(KinetqContext)));
 
-                return methods.Select(x => (Func<IQueryable<TEntity>, IList<Filter>, KinetqContext, IQueryable<TEntity>>)x.CreateDelegate(typeof(Func<IQueryable<TEntity>, IList<Filter>, KinetqContext, IEnumerable<TEntity>>))).SingleOrDefault();
+                return methods.Select(x => (Func<IQueryable<TEntity>, IList<Filter>, KinetqContext, IQueryable<TEntity>>)x.CreateDelegate(typeof(Func<IQueryable<TEntity>, IList<Filter>, KinetqContext, IQueryable<TEntity>>))).SingleOrDefault();
             }
         }        
         
