@@ -3,32 +3,14 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Kinetq.ServiceProvider.Builders;
 
-public class ComposerBuilder<TResult>
+public abstract class ComposerBuilder<TResult>
 {
-    private readonly IList<IServiceBuilder> _serviceBuilders = new List<IServiceBuilder>();
-    private readonly IEnumerable<IKinetqService> _services; 
     private readonly ISessionManager _sessionManager;
-
-    private Func<TResult> _resultFunc;
     protected IDbContextTransaction Transaction { get; set; }
 
-    public ComposerBuilder(ISessionManager sessionManager, IEnumerable<IKinetqService> services)
+    protected ComposerBuilder(ISessionManager sessionManager)
     {
         _sessionManager = sessionManager;
-        _services = services;
-    }
-
-    public ServiceBuilder<TDto, TId, TResult> For<TDto, TId>()
-    {
-        Type type = typeof(IService<TDto, TId>);
-
-        var service = _services.First(x => type.IsInstanceOfType(x));
-
-        var previousResults = _serviceBuilders.SelectMany(x => x.Results).ToList();
-        var serviceBuilder = new ServiceBuilder<TDto, TId, TResult>(service, this, previousResults);
-        _serviceBuilders.Add(serviceBuilder);
-
-        return serviceBuilder;
     }
 
     public ComposerBuilder<TResult> WithTransactionFor(string sessionName)
@@ -39,86 +21,10 @@ public class ComposerBuilder<TResult>
         return this;
     }
 
-    public ComposerBuilder<TResult> Arrange<T1>(Func<T1, TResult> func)
+    protected abstract Task<TResult> Arrange();
+
+    public Task<TResult> Execute()
     {
-        _resultFunc = () =>
-        {
-            var results = 
-                _serviceBuilders
-                    .SelectMany(x => x.Results)
-                    .Select(x => x.HasRun ? x.Value : x.OperationFunc());
-
-            Task.WaitAll(results.ToArray());
-
-            T1 arg = ((Task<T1>)results.First(x => x.GetType() == typeof(Task<T1>))).Result;
-
-            return func(arg);
-        };
-        return this;
-    }
-
-    public ComposerBuilder<TResult> Arrange<T1, T2>(Func<T1, T2, TResult> func)
-    {
-        _resultFunc = () =>
-        {
-            var results =
-                _serviceBuilders
-                    .SelectMany(x => x.Results)
-                    .Select(x => x.HasRun ? x.Value : x.OperationFunc());
-
-            Task.WaitAll(results.ToArray());
-
-            T1 arg = ((Task<T1>)results.First(x => x.GetType() == typeof(Task<T1>))).Result;
-            T2 arg2 = ((Task<T2>)results.First(x => x.GetType() == typeof(Task<T2>))).Result;
-
-            return func(arg, arg2);
-        };
-        return this;
-    }
-
-    public ComposerBuilder<TResult> Arrange<T1, T2, T3>(Func<T1, T2, T3, TResult> func)
-    {
-        _resultFunc = () =>
-        {
-            var results =
-                _serviceBuilders
-                    .SelectMany(x => x.Results)
-                    .Select(x => x.HasRun ? x.Value : x.OperationFunc());
-
-            Task.WaitAll(results.ToArray());
-
-            T1 arg = ((Task<T1>)results.First(x => x.GetType() == typeof(Task<T1>))).Result;
-            T2 arg2 = ((Task<T2>)results.First(x => x.GetType() == typeof(Task<T2>))).Result;
-            T3 arg3 = ((Task<T3>)results.First(x => x.GetType() == typeof(Task<T3>))).Result;
-
-            return func(arg, arg2, arg3);
-        };
-        return this;
-    }
-
-    public ComposerBuilder<TResult> Arrange<T1, T2, T3, T4>(Func<T1, T2, T3, T4, TResult> func)
-    {
-        _resultFunc = () =>
-        {
-            var results =
-                _serviceBuilders
-                    .SelectMany(x => x.Results)
-                    .Select(x => x.HasRun ? x.Value : x.OperationFunc());
-
-            Task.WaitAll(results.ToArray());
-
-            T1 arg = ((Task<T1>)results.First(x => x.GetType() == typeof(Task<T1>))).Result;
-            T2 arg2 = ((Task<T2>)results.First(x => x.GetType() == typeof(Task<T2>))).Result;
-            T3 arg3 = ((Task<T3>)results.First(x => x.GetType() == typeof(Task<T3>))).Result;
-            T4 arg4 = ((Task<T4>)results.First(x => x.GetType() == typeof(Task<T4>))).Result;
-
-            return func(arg, arg2, arg3, arg4);
-        };
-        return this;
-    }
-
-    public TResult Execute()
-    {
-        return _resultFunc();
+        return Arrange();
     }
 }
