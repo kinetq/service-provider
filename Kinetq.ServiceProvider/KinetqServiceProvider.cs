@@ -7,6 +7,7 @@ using Kinetq.ServiceProvider.Interfaces;
 using Kinetq.ServiceProvider.Models;
 using Kinetq.ServiceProvider.ResultModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 
 namespace Kinetq.ServiceProvider
@@ -71,8 +72,8 @@ namespace Kinetq.ServiceProvider
 
                 return methods.Select(x => (Func<IQueryable<TEntity>, IList<Filter>, KinetqContext, IQueryable<TEntity>>)x.CreateDelegate(typeof(Func<IQueryable<TEntity>, IList<Filter>, KinetqContext, IQueryable<TEntity>>))).SingleOrDefault();
             }
-        }        
-        
+        }
+
         private Func<IQueryable<TEntity>, IQueryable<TEntity>> IncludeProvider
         {
             get
@@ -96,7 +97,7 @@ namespace Kinetq.ServiceProvider
         }
 
         protected abstract string SessionKey { get; }
-        protected KinetqContext Session => _sessionManager.GetSessionFrom(SessionKey); 
+        protected KinetqContext Session => _sessionManager.GetSessionFrom(SessionKey);
         protected ILogger Logger => CreateLogger();
         protected virtual ILogger CreateLogger()
         {
@@ -127,22 +128,53 @@ namespace Kinetq.ServiceProvider
 
         public async Task<IList<TDto>> UpsertAsync(IList<TDto> dtos)
         {
-            IList<TDto> result = new List<TDto>();
-            foreach (var dto in dtos)
+            try
             {
-                TId id = (TId)typeof(TDto).GetProperty("Id").GetValue(dto);
+                TId[] ids =
+                    dtos.Select(x => (TId)typeof(TDto).GetProperty("Id").GetValue(x))
+                        .ToArray();
 
-                if (id.EqualsDefaultValue())
+                var existingEntities =
+                    IncludeProvider(Session.Set<TEntity>().AsQueryable().Where(x => ids.Contains(x.Id)))
+                        .ToList();
+
+                var entitiesToUpdate = new List<TEntity>();
+                var entitiesToCreate = new List<TEntity>();
+                foreach (var dto in dtos)
                 {
-                    result.Add(await CreateAsync(dto));
+                    TId id = (TId)typeof(TDto).GetProperty("Id").GetValue(dto);
+                    if (id.EqualsDefaultValue())
+                    {
+                        TEntity entity = _mapper.Map<TDto, TEntity>(dto, opt => opt.Items["SessionKey"] = SessionKey);
+                        entitiesToCreate.Add(entity);
+                    }
+                    else
+                    {
+                        var entity = existingEntities.Single(x => x.Id.Equals(id));
+                        _mapper.Map(dto, entity, opt => opt.Items["SessionKey"] = SessionKey);
+                        entitiesToUpdate.Add(entity);
+                    }
                 }
-                else
+
+                Session.Set<TEntity>().AddRange(entitiesToCreate);
+                Session.Set<TEntity>().UpdateRange(entitiesToUpdate);
+
+                if (await Session.SaveChangesAsync() > -1)
                 {
-                    result.Add(await UpdateAsync(dto));
+                    var entities = new List<TEntity>();
+                    entities.AddRange(entitiesToCreate);
+                    entities.AddRange(entitiesToUpdate);
+
+                    return _mapper.Map<IList<TEntity>, IList<TDto>>(entities);
                 }
+
+                return null;
             }
-
-            return result;
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Could not upsert for dto {typeof(TEntity).Name}");
+                return null;
+            }
         }
 
         public virtual async Task<DeleteResult<TDto>> DeleteAsync(TId id)
@@ -258,6 +290,7 @@ namespace Kinetq.ServiceProvider
         public virtual async Task<ListResult<TDto>> GetForIdsAsync(TId[] ids, int? page = null, int? pageSize = null)
         {
             var query = Session.Set<TEntity>().AsQueryable().Where(x => ids.Contains(x.Id));
+            query = IncludeProvider(query);
 
             int count = await query.CountAsync();
             if (page.HasValue && pageSize.HasValue)

@@ -1,5 +1,6 @@
 ﻿using Kinetq.ServiceProvider.Builders;
 using Kinetq.ServiceProvider.Interfaces;
+using Kinetq.ServiceProvider.Tests.Dtos;
 using Kinetq.ServiceProvider.Tests.Filters;
 using Kinetq.ServiceProvider.Tests.Models;
 using Kinetq.ServiceProvider.Tests.Services;
@@ -58,6 +59,37 @@ namespace Kinetq.ServiceProvider.Tests
             Assert.NotNull(success);
             Assert.Equal("Tom", customer.FirstName);
             Assert.Empty(customer.Orders);
+        }
+
+        [Fact]
+        public async Task UpsertCreateAndUpdate()
+        {
+            await AddCustomer();
+
+            var service = ServiceProvider.GetService<ICustomerService>();
+            var customer1 = await service.GetAsync(1);
+
+            customer1.FirstName = "John";
+
+            var customer2 = new CustomerDto()
+            {
+                FirstName = "Harry",
+                LastName = "Newman",
+                Utilities = Utilities.Electricity
+            };
+
+            var customers = new List<CustomerDto>()
+            {
+                customer1,
+                customer2,
+            };
+
+            var result = await service.UpsertAsync(customers);
+            Assert.NotNull(result);
+            Assert.NotEqual( 0, result[1].Id);
+            Assert.NotEqual(0, result[0].Id);
+
+            Assert.Equal("John", result.Single(x => x.Id.Equals(1)).FirstName);
         }
     }
 }
