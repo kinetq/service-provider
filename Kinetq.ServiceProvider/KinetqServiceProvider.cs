@@ -52,7 +52,7 @@ namespace Kinetq.ServiceProvider
             }
         }
 
-        private Func<IQueryable<TEntity>, IList<Filter>, KinetqContext, IQueryable<TEntity>> ProjectionProvider
+        private Func<IQueryable<TEntity>, IList<Filter>, KinetqContext, Task<IList<TEntity>>> ProjectionProvider
         {
             get
             {
@@ -68,9 +68,9 @@ namespace Kinetq.ServiceProvider
 
                 var methods =
                     filters.SelectMany(x =>
-                        x.GetMethodsBySig(typeof(IQueryable<TEntity>), typeof(IQueryable<TEntity>), typeof(IList<Filter>), typeof(KinetqContext)));
+                        x.GetMethodsBySig(typeof(Task<IList<TEntity>>), typeof(IQueryable<TEntity>), typeof(IList<Filter>), typeof(KinetqContext)));
 
-                return methods.Select(x => (Func<IQueryable<TEntity>, IList<Filter>, KinetqContext, IQueryable<TEntity>>)x.CreateDelegate(typeof(Func<IQueryable<TEntity>, IList<Filter>, KinetqContext, IQueryable<TEntity>>))).SingleOrDefault();
+                return methods.Select(x => (Func<IQueryable<TEntity>, IList<Filter>, KinetqContext, Task<IList<TEntity>>>)x.CreateDelegate(typeof(Func<IQueryable<TEntity>, IList<Filter>, KinetqContext, Task<IList<TEntity>>>))).SingleOrDefault();
             }
         }
 
@@ -374,7 +374,7 @@ namespace Kinetq.ServiceProvider
 
                 return new ListResult<TDto>
                 {
-                    Entities = _mapper.Map<List<TEntity>, List<TDto>>(ProjectionProvider == null ? await query.ToListAsync() : await ProjectionProvider(query, filters, Session).ToListAsync(),
+                    Entities = _mapper.Map<List<TEntity>, List<TDto>>((List<TEntity>)(ProjectionProvider == null ? await query.ToListAsync() : await ProjectionProvider(query, filters, Session)),
                         opt => opt.Items["SessionKey"] = SessionKey),
                     Count = count
                 };

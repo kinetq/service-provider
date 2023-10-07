@@ -3,6 +3,7 @@ using Kinetq.ServiceProvider.Builders;
 using Kinetq.ServiceProvider.Helpers;
 using Kinetq.ServiceProvider.Interfaces;
 using Kinetq.ServiceProvider.Tests.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kinetq.ServiceProvider.Tests.Filters;
 
@@ -20,15 +21,15 @@ public static class CustomerFilters
         return query;
     }
 
-    public static IQueryable<Customer> Project(IQueryable<Customer> query, IList<Filter> filters, KinetqContext context)
+    public static async Task<IList<Customer>> Project(IQueryable<Customer> query, IList<Filter> filters, KinetqContext context)
     {
-        return query.Select(x => new Customer()
+        return await query.Select(x => new Customer()
         {
             FirstName = x.FirstName,
             LastName = x.LastName,
             Id = x.Id,
             Orders = x.Orders,
             Utilities = x.Utilities
-        });
+        }).ToListAsync();
     } 
 }
