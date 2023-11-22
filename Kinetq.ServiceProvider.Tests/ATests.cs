@@ -2,9 +2,7 @@
 using Kinetq.ServiceProvider.Config;
 using Kinetq.ServiceProvider.Helpers;
 using Kinetq.ServiceProvider.Interfaces;
-using Kinetq.ServiceProvider.Managers;
 using Kinetq.ServiceProvider.Resolvers;
-using Kinetq.ServiceProvider.Tests.Composers;
 using Kinetq.ServiceProvider.Tests.Dtos;
 using Kinetq.ServiceProvider.Tests.Models;
 using Kinetq.ServiceProvider.Tests.Services;

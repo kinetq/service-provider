@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>1.0.16</Version>
+    <Version>1.0.17</Version>
     <RepositoryUrl>git@github.com:kinetq/service-provider.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Description>A service provider that simplifies access to the database through a reusable service layer.</Description>
