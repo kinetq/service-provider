@@ -38,13 +38,6 @@ namespace Kinetq.ServiceProvider.Helpers
         public static IList<Type> GetTypesThatImplInterface(this Assembly assembly, Type @interface)
         {
             var types = assembly.DefinedTypes.Where(type => type.ImplementedInterfaces.Contains(@interface)).ToList();
-            types.AddRange(assembly
-                .GetReferencedAssemblies()
-                .Select(Assembly.Load)
-                .SelectMany(x => x.DefinedTypes)
-                .Where(type => type.ImplementedInterfaces.Contains(@interface))
-                .ToList());
-
             return types.Cast<Type>().ToList();
         }
     }
