@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>1.0.19</Version>
+    <Version>1.0.20</Version>
     <RepositoryUrl>git@github.com:kinetq/service-provider.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Description>A service provider that simplifies access to the database through a reusable service layer.</Description>
