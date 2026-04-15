@@ -6,11 +6,11 @@ using Kinetq.ServiceProvider.Resolvers;
 using Kinetq.ServiceProvider.Tests.Dtos;
 using Kinetq.ServiceProvider.Tests.Models;
 using Kinetq.ServiceProvider.Tests.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Xunit;
 
@@ -26,10 +26,6 @@ namespace Kinetq.ServiceProvider.Tests
         public async Task InitializeAsync()
         {
             ServiceCollection = new ServiceCollection();
-
-            var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
-            mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(new DefaultHttpContext());
-            ServiceCollection.AddSingleton(mockHttpContextAccessor.Object);
             
             ServiceCollection.AddScoped<ICustomerService, CustomerService>();
             ServiceCollection.AddScoped<IKinetqService, CustomerService>();
@@ -52,7 +48,7 @@ namespace Kinetq.ServiceProvider.Tests
 
                     cfg.CreateMap<Customer, CustomerDto>()
                         .ForMember(dst => dst.OrderIds, opt => opt.MapFrom(src => src.Orders.Select(x => x.Id)));
-                });
+                }, new NullLoggerFactory());
 
                 return config.CreateMapper();
             }, ServiceLifetime.Singleton));

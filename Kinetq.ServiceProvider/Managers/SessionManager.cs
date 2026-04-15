@@ -1,6 +1,5 @@
 ﻿using Kinetq.ServiceProvider.Config;
 using Kinetq.ServiceProvider.Interfaces;
-using Microsoft.AspNetCore.Http;
 
 namespace Kinetq.ServiceProvider.Managers
 {
@@ -9,17 +8,14 @@ namespace Kinetq.ServiceProvider.Managers
         private readonly string SESSIONS_KEY = "DBCONTEXT_CONTEXT_SESSIONS";
 
         private readonly IConfigurationManager<EFOptions> _configurationManager;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IDictionary<string, KinetqContext> _backupContextSessions = new Dictionary<string, KinetqContext>();
         private readonly IEnumerable<IPersistanceConfiguration> _persistanceConfigurations;
 
         public SessionManager(
             IConfigurationManager<EFOptions> configurationManager,
-            IHttpContextAccessor httpContextAccessor, 
             IEnumerable<IPersistanceConfiguration> persistanceConfigurations)
         {
             _configurationManager = configurationManager;
-            _httpContextAccessor = httpContextAccessor;
             _persistanceConfigurations = persistanceConfigurations;
         }
 
@@ -52,23 +48,6 @@ namespace Kinetq.ServiceProvider.Managers
             }
         }
 
-        public IDictionary<string, KinetqContext> ContextSessions
-        {
-            get
-            {
-                if (_httpContextAccessor.HttpContext == null)
-                {
-                    return _backupContextSessions;
-                }
-
-                if (!_httpContextAccessor.HttpContext.Items.TryGetValue(SESSIONS_KEY, out var sessions))
-                {
-                    sessions = new Dictionary<string, KinetqContext>();
-                    _httpContextAccessor.HttpContext.Items.Add(SESSIONS_KEY, sessions);
-                }
-
-                return (IDictionary<string, KinetqContext>)sessions;
-            }
-        }
+        public IDictionary<string, KinetqContext> ContextSessions => _backupContextSessions;
     }
 }

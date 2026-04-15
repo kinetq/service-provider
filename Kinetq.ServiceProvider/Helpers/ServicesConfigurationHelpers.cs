@@ -12,7 +12,7 @@ namespace Kinetq.ServiceProvider.Helpers
     {
         public static void AddDataServices(this IServiceCollection services, string @namespace)
         {
-            services.TryAddSingleton<ISessionManager, SessionManager>();
+            services.TryAddScoped<ISessionManager, SessionManager>();
             services.TryAddSingleton<IConfigurationManager<EFOptions>, ConfigurationManager>();
 
             var moduleAssembly = Assembly.Load(new AssemblyName(@namespace));
